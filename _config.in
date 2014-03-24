@@ -1,0 +1,75 @@
+*************************************************************************************
+*************************************************************************************
+****  these are the parameters that will be loaded at the beginning of the run;  ****
+****  check them in " _parameters.bak.pls " to see em'been loaded right or not.  ****
+*************************************************************************************
+*************************************************************************************
+
+_IFVERBOSE            true              //verbose or not;     
+
+_FILENAME_conf        pnc.pdb       //if 'f': file name of initial conformation
+#_RESTARTFlag          false
+_RESTARTFlag          true 600 600 600 // boxlx, boxly, boxlz;
+
+_MUCAfile             beta.dat //if _MUCAFlag==true, this specifies the inputfile;
+_FLAG_pivot           2.0               //use pivot algorithm or just the Cartesian moves; 0.0 for all pivot;
+_FLAG_rg2             true              //calculate the dis of rg2 or not;
+_FLAG_ener            true              //calculate the dis of ener or not;
+_LINDEMANN_INDEX      false              //stat LINDEMANN INDEX or not;
+_ACCINDEX             0      // 0 no effect; better >1000 the larger the higher precision; < 5000 be careful, it eats memory;
+
+_OPlist                  
+// group appears as list [head:tail], e.g.: 1 64 65 65 means 
+// group1: 1-64
+// group2: 65
+// please be awared: no comments this line, this line is pure arguments for PAMCS.
+
+
+_CoorX1               -300.0            //BOUNDARY of BOX - Xmin;
+_CoorX2               300.0              //BOUNDARY of BOX - Xmax;
+_CoorY1               -300.0            //BOUNDARY of BOX - Ymin;
+_CoorY2               300.0              //BOUNDARY of BOX - Ymax;
+_CoorZ1               -300.0            //BOUNDARY of BOX - Zmin; testing: -20          when _WALL_effect=true
+_CoorZ2               300.0              //BOUNDARY of BOX - Zmax; testing: 4*CHN_LEN-20 when _WALL_effect=true
+_PBC_Dim              1                  //dimention of Periodic Boundary Condition;
+
+_Box -2.5
+_Block  1.0
+
+Q1                    0.00
+Q2                    -0.00
+
+_BF_flag              true              //with bond fluctuation or not;
+_BF_coeff             1.0               //to what extent the trial move being made [-0.5,0.5] for 1.0; >= 2.0*BF;
+_BF_scale             0.5               //scale from T_high to T_low with this much;
+										//please be noted if it's too small the sample will be not sufficient, too large will be //rejected at lower T, so please be careful;
+_AG_flag              false             //with angle calculation or not;
+_DH_flag              false             //with dihedral calculation or not;
+_FFPARA_FN            _ffpara.pls       //read _epsilon info from this file ...
+_NEIGHBOR_lj          1                 //apart from how many atoms we begin calculation of potential;
+                                        //for example if _BF_flag == false, you can numerate it 1;
+_NUM_replicas         64
+_E_lowest             -400
+_E_interval           0.100
+_E_totalnum           8000
+
+_RG_lowest           2.4       //it's acutally the x, y, z RG^2 = RG^2 /3 ＝ (RG*$\sigma$)^2 / 3
+_RG_interval         0.012
+_RG_totalnum         50       // actually in the system is _RG_totalnum/NC/NC
+
+_FLAG_dis            false
+
+//contacts
+_EINTlist              
+_EINT_lowest  0
+_EINT_interval -1.0
+_EINT_totalnum 1
+
+_RUNTIMES_eachstep    5000         //actually _RUNTIMES_eachstep*_NUM_atoms; number of mcs per step on each replica;
+_RUNTIMES_totalnum    10000            //how many steps on each replica; the following para are based on this.
+_RUNTIMES_recording   0                //
+_RUNTIMES_remgap      50               //one rem per remgap*natoms mcs
+_RUNTIMES_output      100             //how many times output > remgap
+_recordinglist 
+//Energy index to be put here, could be a list with blank to separate.
+

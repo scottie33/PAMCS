@@ -1,0 +1,47 @@
+
+reset
+
+
+set term post enh size 8,4.5 color
+set out 'entropy.eps'
+
+#set term X11 size 640,360 #16:9 nice look
+set multiplot
+#unset key
+#set title 
+
+load "paraentropy.gpl"
+emin=emin/epsilon/numatoms
+emax=emax/epsilon/numatoms
+
+set xlabel '{/Times-Italic E/{/Symbol e}/N}' font ",20"# tc rgb "#0000ff"
+#set encoding default
+set ylabel '{/Times-Italic S(E/{/Symbol e}/N)}' font ",20"# tc rgb "#880000"
+set y2label '{/Times-Italic exp(S(E)-{/Symbol b}E)}' rotate by -90 font ",20"# tc rgb "#880000"
+#set xrange [emin+(emax-emin)/2:emax]
+set xrange [emin:emax]
+#smax=(smax-smin)*1.1+smin
+set yrange [smin:smax]
+set y2range [:]
+set ytics nomirror #font "UTF-8,12" #tc rgb "#880000"
+set y2tics nomirror #ntc rgb "#008800"
+set xtics nomirror #font "UTF-8,12" #tc rgb "#0000ff"
+xinterval=(int(emax*10.0-emin*10.0))/100.0
+set xtics xinterval
+
+set mxtics 10
+set mytics 2
+set my2tics 4
+#set grid xtics lt 0 lw 1 lc rgb "#0000ff"
+set style fill transparent solid 0.1 noborder
+set key left
+set key box
+#plot for [i=2:nrep:1] "probability_each.dat" u 1:i w filledcurves title "T".i
+#plot "entropy.dat" u 1:2 w l lt 1 lw 6 lc rgb "gray" title "",\
+
+plot     "entropy.dat" u ($1/epsilon/numatoms):2 w l lt 1 lw 2 lc rgb "black" title "{/Times-Italic S(E/{/Symbol e})}",\
+for [i=1:10:1]  "entropy.dat" u ($1/epsilon/numatoms):(exp($2-$1/i)) axis x1y2 w l lt 1 lw 2 lc i title "k_{B}T=".i
+
+unset multiplot
+
+
